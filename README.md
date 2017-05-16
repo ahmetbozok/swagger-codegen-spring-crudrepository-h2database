@@ -1,4 +1,4 @@
-#swagger-codegen-spring-crudrepository-h2database
+# swagger-codegen-spring-crudrepository-h2database
 
 This project just an example to understand how to use swagger-codegen for a rest api definition and also spring data CRUD repository with h2 embedded database. Before review this project you should know basic terms of swagger-codegen and also spring-boot and spring-data.
 
