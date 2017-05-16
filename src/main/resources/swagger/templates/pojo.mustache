@@ -1,0 +1,67 @@
+import java.util.Objects;
+
+{{>generatedAnnotation}}
+public class {{classname}}{{#parent}} extends {{{parent}}}{{/parent}}{{#serializableModel}} implements Serializable{{/serializableModel}} {
+  {{#vars}}
+    {{#isEnum}}
+    {{^isContainer}}
+{{>enumClass}}
+    {{/isContainer}}
+    {{/isEnum}}
+    {{#items.isEnum}}
+      {{#items}}
+      {{^isContainer}}
+{{>enumClass}}
+      {{/isContainer}}
+      {{/items}}
+    {{/items.isEnum}}
+  {{#jackson}}
+    @JsonProperty("{{baseName}}")
+  {{/jackson}}
+  {{#gson}}
+    @SerializedName("{{baseName}}")
+  {{/gson}}
+    private {{{datatypeWithEnum}}} {{name}};
+  {{/vars}}
+  {{#vars}}{{#hasVars}}
+  {{/hasVars}}
+ {{#vendorExtensions.extraAnnotation}}
+  {{vendorExtensions.extraAnnotation}}
+  {{/vendorExtensions.extraAnnotation}}
+    public {{{datatypeWithEnum}}} {{getter}}() {
+        return {{name}};
+    }
+
+    public void {{setter}}({{{datatypeWithEnum}}} {{name}}) {
+        this.{{name}} = {{name}};
+    }
+
+  {{/vars}}
+    @Override
+    public boolean equals(java.lang.Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }{{#hasVars}}
+        {{classname}} {{classVarName}} = ({{classname}}) o;
+        return {{#vars}}Objects.equals(this.{{name}}, {{classVarName}}.{{name}}){{#hasMore}} &&
+            {{/hasMore}}{{/vars}}{{#parent}} &&
+            super.equals(o){{/parent}};{{/hasVars}}{{^hasVars}}
+        return true;{{/hasVars}}
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash({{#vars}}{{name}}{{#hasMore}}, {{/hasMore}}{{/vars}}{{#parent}}{{#hasVars}}, {{/hasVars}}super.hashCode(){{/parent}});
+    }
+
+    @Override
+    public String toString() {
+        return "{{classname}}{" +{{#parent}}
+            super.toString() +{{/parent}}
+            {{#vars}}", {{name}}=" + {{name}} +
+            {{/vars}}"}";
+    }
+}

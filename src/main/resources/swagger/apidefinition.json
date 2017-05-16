@@ -1,0 +1,190 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "This is an user server API.\n",
+    "version": "1.0.0",
+    "title": "User API"
+  },
+  "basePath": "/users",
+  "schemes": [
+    "http"
+  ],
+  "paths": {
+    "/users":{
+      "get":{
+        "tags": [
+          "users"
+        ],
+        "summary": "Users list",
+        "operationId": "users",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "schema": {
+              "$ref": "#/definitions/UsersResponse"
+            }
+          }
+        }
+      }
+    },
+    "/users/{userId}":{
+      "get":{
+        "tags": [
+          "user"
+        ],
+        "summary": "Get user by userId",
+        "operationId": "getUser",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "user id",
+            "required": "true"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "schema": {
+              "$ref": "#/definitions/UserResponse"
+            }
+          }
+        }
+      }
+    },
+    "/users/add":{
+      "post":{
+        "tags": [
+          "users"
+        ],
+        "summary": "Create new user",
+        "operationId": "createUser",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "CreateUserRequest",
+            "in": "body",
+            "description": "User object for creation",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateUserRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfuly created user",
+            "schema": {
+              "$ref": "#/definitions/UserResponse"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "BaseResponse":{
+      "discriminator": "baseResponseType",
+      "type": "object",
+      "required":[
+        "error",
+        "message"
+      ],
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "error": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+    "User": {
+      "type": "object",
+      "required": [
+        "firstName",
+        "lastName",
+        "userName",
+        "email"
+      ],
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "firstName": {
+          "type": "string"
+        },
+        "lastName": {
+          "type": "string"
+        },
+        "userName": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        }
+      }
+    },
+    "UsersResponse": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/BaseResponse"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "customers": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/User"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "UserResponse": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/BaseResponse"
+        },
+        {
+          "type": "object",
+          "required":[
+            "user"
+          ],
+          "properties": {
+            "user": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        }
+      ]
+    },
+    "CreateUserRequest": {
+      "type": "object",
+      "required": [
+        "user"
+      ],
+      "properties": {
+        "user": {
+          "$ref": "#/definitions/User"
+        }
+      }
+    }
+  }
+}
